@@ -7,8 +7,9 @@ profit_loss = []
 # Initialize netProfitLoss variable to 0
 netProfitLoss = 0
 # Change in monthly revenue dictionary
-monthlyRevenueChange = {}
-greatestProfitIncreaseKeysArr = []
+monthlyRevenueChangeArr = []
+monthlyRevenueChange = 0
+# greatestProfitIncreaseKeysArr = []
 
 
 # open csv file
@@ -39,24 +40,36 @@ with open('Resources/budget_data.csv', newline='') as budgetDataCSVFile:
         # Preserve the prev row's value for next iteration
         prevRowProfitLoss = int(row[1])
         # Helps calcualte the average of profit loss changes over a period
-        monthlyRevenueChange[row[0]] = profitLossChangeFromPrevRow
-        # monthlyRevenueChange['Date'].append(row[0])
+        monthlyRevenueChangeArr.append(
+            {"date": row[0], "value": profitLossChangeFromPrevRow})
+        monthlyRevenueChange = monthlyRevenueChange + profitLossChangeFromPrevRow
+
         netProfitLoss = netProfitLoss + int(row[1])
 
-Avg_ProfitLossChange = sum(monthlyRevenueChange.values())/(len(dates) - 1)
-sortedMonthlyRevenueArray = sorted(monthlyRevenueChange.values())
-greatestProfitIncreaseKeysArr = monthlyRevenueChange.keys()
-greatestProfitIncreaseDate = list(greatestProfitIncreaseKeysArr)[0]
-greatestProfitIncrease = monthlyRevenueChange[greatestProfitIncreaseDate]
+Avg_ProfitLossChange = monthlyRevenueChange/(len(dates) - 1)
+sortedMonthlyRevenueArray = sorted(
+    monthlyRevenueChangeArr, key=lambda item: item["value"])
+length_sortedMonthlyRevenueArray = len(sortedMonthlyRevenueArray)
+greatestProfitDecreaseDate = (sortedMonthlyRevenueArray[0])["date"]
+greatestProfitDecrease = (sortedMonthlyRevenueArray[0])["value"]
+greatestProfitIncreaseDate = (
+    sortedMonthlyRevenueArray[length_sortedMonthlyRevenueArray - 1])["date"]
+greatestProfitIncrease = (
+    sortedMonthlyRevenueArray[length_sortedMonthlyRevenueArray - 1])["value"]
 
+# Print Analysis to Terminal
+print(f'Financial Analysis\n')
+print(f'----------------------------\n')
 # The length of the dates array --> no.of months
-print(len(dates))
-# array of profit and loss values
-print(sortedMonthlyRevenueArray)
+print(f'Total Months: {len(dates)}\n')
 # The net total amount of profit/losses over a period
-print(netProfitLoss)
+print(f'Total: {netProfitLoss}\n')
 # The average of profit loss changes over a period
-print(Avg_ProfitLossChange)
+print(f'Average Change: ${Avg_ProfitLossChange:.2f}\n')
+print(
+    f'Greatest Increase in Profits: {greatestProfitIncreaseDate} (${greatestProfitIncrease})\n')
+print(
+    f'Greatest Decrease in Profits: {greatestProfitDecreaseDate} (${greatestProfitDecrease})\n')
 
 
 # Write the outputs to an analysis file
@@ -65,7 +78,8 @@ with open('analysis/analysis.txt', 'w') as analysisFile:
     analysisFile.write(f'----------------------------\n')
     analysisFile.write(f'Total Months: {len(dates)}\n')
     analysisFile.write(f'Total: {netProfitLoss}\n')
-    analysisFile.write(f'Average Change: {Avg_ProfitLossChange:.2f}\n')
+    analysisFile.write(f'Average Change: ${Avg_ProfitLossChange:.2f}\n')
     analysisFile.write(
-        f'GPI: {greatestProfitIncrease} on {greatestProfitIncreaseDate}\n')
-    analysisFile.write('')
+        f'Greatest Increase in Profits: {greatestProfitIncreaseDate} (${greatestProfitIncrease})\n')
+    analysisFile.write(
+        f'Greatest Decrease in Profits: {greatestProfitDecreaseDate} (${greatestProfitDecrease})\n')
