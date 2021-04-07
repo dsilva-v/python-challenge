@@ -9,8 +9,6 @@ netProfitLoss = 0
 # Change in monthly revenue dictionary
 monthlyRevenueChangeArr = []
 monthlyRevenueChange = 0
-# greatestProfitIncreaseKeysArr = []
-
 
 # open csv file
 with open('Resources/budget_data.csv', newline='') as budgetDataCSVFile:
