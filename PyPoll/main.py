@@ -3,7 +3,7 @@ import csv
 # voterId array
 voterIds = []
 # dictionary to hold voterid, county and candidate name
-electionData = {}
+electionData = dict()
 
 # open csv file
 with open('Resources/election_data.csv', newline='') as electionDataCSVFile:
@@ -31,7 +31,8 @@ print(f'----------------------------\n')
 print(f'Total Votes: {TotalVotes} \n')
 print(f'----------------------------\n')
 for key, value in electionData.items():
-    print(f'{key}: ({value})\n')
+    percentage = (value/TotalVotes) * 100
+    print(f'{key}: {percentage:.3f}% ({value})\n')
 print(f'----------------------------\n')
 print(f'Winner: {Winner} \n')
 print(f'----------------------------\n')
@@ -44,7 +45,8 @@ with open('analysis/analysis.txt', 'w') as analysisFile:
     analysisFile.write(f'Total Votes: {TotalVotes} \n')
     analysisFile.write(f'----------------------------\n')
     for key, value in electionData.items():
-        analysisFile.write(f'{key}: ({value})\n')
+        percentage = (value/TotalVotes) * 100
+        analysisFile.write(f'{key}: {percentage:.3f}% ({value})\n')
     analysisFile.write(f'----------------------------\n')
     analysisFile.write(f'Winner: {Winner} \n')
     analysisFile.write(f'----------------------------\n')
